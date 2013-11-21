@@ -60,3 +60,6 @@ $api->connectHook(
 );
 
 $api->addRegularTask('OCA\Music\Backgroundjob\CleanUp', 'run');
+
+// load file for public sharing page
+$api->addScript('public/musicFilePlayer');
