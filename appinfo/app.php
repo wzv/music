@@ -63,3 +63,16 @@ $api->addRegularTask('OCA\Music\Backgroundjob\CleanUp', 'run');
 
 // load fileactions
 $api->addScript('public/fileactions');
+
+if(version_compare(join('.', $api->getVersion()), '6.0.3', '<')){
+	$api->addScript('public/stable5-fixes');
+}
+
+// load file for public sharing page
+$api->addScript('public/musicFilePlayer');
+
+// register search provider
+\OC_Search::registerProvider('OCA\Music\Utility\Search');
+
+// register settings
+$api->registerPersonal('settings/user');

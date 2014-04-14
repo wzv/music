@@ -29,6 +29,7 @@ use \OCA\Music\AppFramework\Http\Request;
 use \OCA\Music\BusinessLayer\TrackBusinessLayer;
 use \OCA\Music\BusinessLayer\ArtistBusinessLayer;
 use \OCA\Music\BusinessLayer\AlbumBusinessLayer;
+use \OCA\Music\Utility\Scanner;
 
 
 class ApiController extends Controller {
@@ -36,14 +37,64 @@ class ApiController extends Controller {
 	private $trackBusinessLayer;
 	private $artistBusinessLayer;
 	private $albumBusinessLayer;
+	private $scanner;
 
 	public function __construct(API $api, Request $request,
 		TrackBusinessLayer $trackbusinesslayer, ArtistBusinessLayer $artistbusinesslayer,
-		AlbumBusinessLayer $albumbusinesslayer){
+		AlbumBusinessLayer $albumbusinesslayer, Scanner $scanner){
 		parent::__construct($api, $request);
 		$this->trackBusinessLayer = $trackbusinesslayer;
 		$this->artistBusinessLayer = $artistbusinesslayer;
 		$this->albumBusinessLayer = $albumbusinesslayer;
+		$this->scanner = $scanner;
+	}
+
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 * @Ajax
+	 * @API
+	 */
+	public function collection() {
+		$userId = $this->api->getUserId();
+		$path = $this->api->getUserValue('path');
+		if (!$path) {
+			$path = '/';
+		}
+		$path = 'files' . $path;
+
+		$allArtists = $this->artistBusinessLayer->findAll($userId);
+		$allArtistsById = array();
+		foreach ($allArtists as &$artist) {
+			$allArtistsById[$artist->getId()] = $artist->toCollection($this->api);
+		}
+
+		$allAlbums = $this->albumBusinessLayer->findAllWithFileInfo($userId);
+		$allAlbumsById = array();
+		foreach ($allAlbums as &$album) {
+			$allAlbumsById[$album->getId()] = $album->toCollection($this->api);
+		}
+
+		$allTracks = $this->trackBusinessLayer->findAllByPath($path, $userId);
+
+		$artists = array();
+		foreach ($allTracks as $track) {
+			$artist = &$allArtistsById[$track->getArtistId()];
+			if (!isset($artist['albums'])) {
+				$artist['albums'] = array();
+				$artists[] = &$artist;
+			}
+			$album = &$allAlbumsById[$track->getAlbumId()];
+			if (!isset($album['tracks'])) {
+				$album['tracks'] = array();
+				$artist['albums'][] = &$album;
+			}
+
+			$album['tracks'][] = $track->toCollection($this->api);
+		}
+
+		return $this->renderPlainJSON($artists);
 	}
 
 	/**
@@ -229,6 +280,27 @@ class ApiController extends Controller {
 		$fileId = $this->params('fileId');
 		$userId = $this->api->getUserId();
 		$track = $this->trackBusinessLayer->findByFileId($fileId, $userId);
-		return $this->renderPlainJSON($track->toAPI($this->api));
+		return $this->renderPlainJSON($track->toCollection($this->api));
+	}
+
+	/**
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 * @Ajax
+	 * @API
+	 */
+	public function scan() {
+		$userId = $this->api->getUserId();
+		$dry = (boolean) $this->params('dry');
+		if($dry) {
+			$result = array(
+				'processed' => count($this->scanner->getScannedFiles($userId)),
+				'scanned' => 0,
+				'total' => count($this->scanner->getMusicFiles())
+			);
+		} else {
+			$result = $this->scanner->rescan($userId);
+		}
+		return $this->renderPlainJSON($result);
 	}
 }

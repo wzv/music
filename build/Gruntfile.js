@@ -28,7 +28,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-wrap');
-	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-phpunit');
 	grunt.loadNpmTasks('grunt-angular-gettext');
 
@@ -73,7 +72,11 @@ module.exports = function(grunt) {
 				'../js/app/**/*.js',
 				'../js/config/*.js',
 				'../js/l10n/*.js',
-				'../tests/js/unit/**/*.js'
+				'../tests/js/unit/**/*.js',
+				'../js/public/**/*.js'
+			],
+			exclude: [
+				'../js/public/app.js'
 			],
 			options: {
 				// options here to override JSHint defaults
@@ -107,18 +110,6 @@ module.exports = function(grunt) {
 			},
 			options: {
 				colors: true
-			}
-		},
-
-		karma: {
-			unit: {
-				configFile: '../tests/js/config/karma.js'
-			},
-			continuous: {
-				configFile: '../tests/js/config/karma.js',
-				singleRun: true,
-				browsers: ['PhantomJS'],
-				reporters: ['progress']
 			}
 		},
 

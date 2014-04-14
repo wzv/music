@@ -21,8 +21,8 @@
 
 
 angular.module('Music').controller('PlayerController',
-	['$scope', '$routeParams', '$rootScope', 'playlistService', 'Audio', 'Artists', 'Restangular', 'gettext',
-	function ($scope, $routeParams, $rootScope, playlistService, Audio, Artists, Restangular, gettext) {
+	['$scope', '$rootScope', 'playlistService', 'Audio', 'Restangular', 'gettext', 'gettextCatalog', '$filter',
+	function ($scope, $rootScope, playlistService, Audio, Restangular, gettext, gettextCatalog, $filter) {
 
 	$scope.playing = false;
 	$scope.buffering = false;
@@ -36,20 +36,144 @@ angular.module('Music').controller('PlayerController',
 	$scope.repeat = false;
 	$scope.shuffle = false;
 
+	$scope.eventsBeforePlaying = 2;
+	$scope.$playPosition = $('.play-position');
+	$scope.$bufferBar = $('.buffer-bar');
+	$scope.$playBar = $('.play-bar');
+
 	// will be invoked by the audio factory
 	$rootScope.$on('SoundManagerReady', function() {
-		$scope.playFile($routeParams.id);
-		if($scope.$parent.started) {
+		if($rootScope.started) {
 			// invoke play after the flash gets unblocked
 			$scope.$apply(function(){
 				$scope.next();
 			});
 		}
+		if (!--$scope.eventsBeforePlaying) $scope.handlePlayRequest();
 	});
 
-	$rootScope.$on('$routeChangeSuccess', function() {
-		$scope.playFile($routeParams.id);
+	$rootScope.$on('artistsLoaded', function () {
+		if (!--$scope.eventsBeforePlaying) $scope.handlePlayRequest();
 	});
+
+	$(window).on('hashchange', function() {
+		$scope.handlePlayRequest();
+		$scope.$apply();
+	});
+
+	$scope.handlePlayRequest = function() {
+		if (!$scope.$parent.artists) {
+			return;
+		}
+
+		var type,
+			object,
+			playRequest = $scope.$parent.playRequest;
+
+		if (playRequest) {
+			type = playRequest.type;
+			object = playRequest.object;
+			$scope.$parent.playRequest = null;
+		} else {
+			var hashParts = window.location.hash.substr(1).split('/');
+			if (!hashParts[0] && hashParts[1] && hashParts[2]) {
+				type = hashParts[1];
+				var id = hashParts[2];
+
+				if (type == 'file') {
+					object = id;
+				} else if (type == 'artist') {
+					// search for the artist by id
+					object = _.find($scope.$parent.artists, function(artist) {
+						return artist.id == id;
+					});
+				} else {
+					var albums = _.flatten(_.pluck($scope.$parent.artists, 'albums'));
+					if (type == 'album') {
+						// search for the album by id
+						object = _.find(albums, function(album) {
+							return album.id == id;
+						});
+					} else if (type == 'track') {
+						var tracks = _.flatten(_.pluck(albums, 'tracks'));
+						// search for the track by id
+						object = _.find(tracks, function(track) {
+							return track.id == id;
+						});
+					}
+				}
+			}
+		}
+		if (type && object) {
+			if (type == 'artist') {
+				$scope.playArtist(object);
+			} else if (type == 'album') {
+				$scope.playAlbum(object);
+			} else if (type == 'track') {
+				$scope.playTrack(object);
+			} else if (type == 'file') {
+				$scope.playFile(object);
+			}
+		}
+	};
+
+	$scope.playTrack = function(track) {
+		var artist = _.find($scope.$parent.artists,
+			function(artist) {
+				return artist.id === track.artistId;
+			}),
+			album = _.find(artist.albums,
+			function(album) {
+				return album.id === track.albumId;
+			}),
+			tracks = _.sortBy(album.tracks,
+				function(track) {
+					return track.number;
+				}
+			);
+		// determine index of clicked track
+		var index = tracks.indexOf(track);
+		if(index > 0) {
+			// slice array in two parts and interchange them
+			var begin = tracks.slice(0, index);
+			var end = tracks.slice(index);
+			tracks = end.concat(begin);
+		}
+		playlistService.setPlaylist(tracks);
+		playlistService.publish('play');
+	};
+
+	$scope.playAlbum = function(album) {
+		var tracks = _.sortBy(album.tracks,
+				function(track) {
+					return track.number;
+				}
+			);
+		playlistService.setPlaylist(tracks);
+		playlistService.publish('play');
+	};
+
+	$scope.playArtist = function(artist) {
+		var albums = _.sortBy(artist.albums,
+			function(album) {
+				return album.year;
+			}),
+			playlist = _.union.apply(null,
+				_.map(
+					albums,
+					function(album){
+						var tracks = _.sortBy(album.tracks,
+							function(track) {
+								return track.number;
+							}
+						);
+						return tracks;
+					}
+				)
+			);
+		playlistService.setPlaylist(playlist);
+		playlistService.publish('play');
+	};
 
 	$scope.playFile = function (fileid) {
 		if (fileid) {
@@ -74,16 +198,7 @@ angular.module('Music').controller('PlayerController',
 	});
 
 	$scope.getPlayableFileURL = function (track) {
-		var isChrome = (navigator && navigator.userAgent &&
-			navigator.userAgent.indexOf('Chrome') !== -1) ?
-				true : false;
 		for(var mimeType in track.files) {
-			if(mimeType === 'audio/ogg' && isChrome) {
-				// TODO inject this
-				OC.Notification.showHtml(gettext(
-					'Chrome is only able to playback MP3 files - see <a href="https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files">wiki</a>'
-				));
-			}
 			if(Audio.canPlayMIME(mimeType)) {
 				return track.files[mimeType];
 			}
@@ -98,23 +213,29 @@ angular.module('Music').controller('PlayerController',
 		$scope.player.destroySound('ownCloudSound');
 		if(newValue !== null) {
 			// switch initial state
-			$scope.$parent.started = true;
+			$rootScope.started = true;
 			// find artist
 			$scope.currentArtist = _.find($scope.artists,
 										function(artist){
-											return artist.id === newValue.artist.id;
+											return artist.id === newValue.artistId;
 										});
 			// find album
 			$scope.currentAlbum = _.find($scope.currentArtist.albums,
 										function(album){
-											return album.id === newValue.album.id;
+											return album.id === newValue.albumId;
 										});
 
 			$scope.player.createSound({
 				id: 'ownCloudSound',
 				url: $scope.getPlayableFileURL($scope.currentTrack),
 				whileplaying: function() {
-					$scope.setTime(this.position/1000, this.duration/1000);
+					$scope.setTime(this.position/1000, this.durationEstimate/1000);
+				},
+				whileloading: function() {
+					var position = this.buffered.reduce(function(prevBufferEnd, buffer) {
+						return buffer.end > prevBufferEnd ? buffer.end : prevBuffer.end;
+					}, 0);
+					$scope.setBuffer(position/1000, this.durationEstimate/1000);
 				},
 				onstop: function() {
 					$scope.setPlay(false);
@@ -165,9 +286,9 @@ angular.module('Music').controller('PlayerController',
 			$scope.currentArtist = null;
 			$scope.currentAlbum = null;
 			// switch initial state
-			$scope.$parent.started = false;
+			$rootScope.started = false;
 		}
-	});
+	}, true);
 
 	// only call from external script
 	$scope.setPlay = function(playing) {
@@ -197,17 +318,12 @@ angular.module('Music').controller('PlayerController',
 
 	// only call from external script
 	$scope.setTime = function(position, duration) {
-		// determine if already inside of an $apply or $digest
-		// see http://stackoverflow.com/a/12859093
-		if($scope.$$phase) {
-			$scope.duration = duration;
-			$scope.position = position;
-		} else {
-			$scope.$apply(function(){
-				$scope.duration = duration;
-				$scope.position = position;
-			});
-		}
+		$scope.$playPosition.text($filter('playTime')(position) + ' / ' + $filter('playTime')(duration));
+		$scope.$playBar.css('width', (position / duration * 100) + '%');
+	};
+
+	$scope.setBuffer = function(position, duration) {
+		$scope.$bufferBar.css('width', (position / duration * 100) + '%');
 	};
 
 	$scope.toggle = function(forcePlay) {
@@ -240,6 +356,12 @@ angular.module('Music').controller('PlayerController',
 			$scope.currentTrack = track;
 		}
 	};
+
+	$scope.seek = function($event) {
+		var sound = $scope.player.sounds.ownCloudSound,
+			offsetX = $event.offsetX || $event.originalEvent.layerX;
+		sound.setPosition(offsetX * sound.durationEstimate / $event.currentTarget.clientWidth);
+        };
 
 	playlistService.subscribe('play', function(){
 		// fetch track and start playing

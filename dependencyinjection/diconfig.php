@@ -25,74 +25,112 @@
 
 namespace OCA\Music\DependencyInjection;
 
+use \OCA\Music\BusinessLayer\AlbumBusinessLayer;
+use \OCA\Music\BusinessLayer\ArtistBusinessLayer;
+use \OCA\Music\BusinessLayer\TrackBusinessLayer;
+use \OCA\Music\Controller\AmpacheController;
 use \OCA\Music\Controller\ApiController;
 use \OCA\Music\Controller\LogController;
 use \OCA\Music\Controller\PageController;
-use \OCA\Music\BusinessLayer\TrackBusinessLayer;
-use \OCA\Music\BusinessLayer\ArtistBusinessLayer;
-use \OCA\Music\BusinessLayer\AlbumBusinessLayer;
-use \OCA\Music\Db\TrackMapper;
-use \OCA\Music\Db\ArtistMapper;
-use \OCA\Music\Db\AlbumMapper;
-use \OCA\Music\Db\ScanStatusMapper;
-use \OCA\Music\Utility\Scanner;
-use \OCA\Music\Utility\ExtractorGetID3;
+use \OCA\Music\Controller\SettingController;
 use \OCA\Music\Core\API;
+use \OCA\Music\DB\AlbumMapper;
+use \OCA\Music\DB\AmpacheSessionMapper;
+use \OCA\Music\DB\AmpacheUserMapper;
+use \OCA\Music\DB\ArtistMapper;
+use \OCA\Music\DB\TrackMapper;
+use \OCA\Music\Middleware\AmpacheMiddleware;
+use \OCA\Music\Utility\AmpacheUser;
+use \OCA\Music\Utility\ExtractorGetID3;
+use \OCA\Music\Utility\Scanner;
+
+use \OCA\Music\AppFramework\Middleware\MiddlewareDispatcher;
 
 // in stable5 getid3 is already loaded
 if(!class_exists('getid3_exception')) {
 	require_once __DIR__ . '/../3rdparty/getID3/getid3/getid3.php';
 }
 
-/**
- * Delete the following twig config to use ownClouds default templates
- */
-// use this to specify the template directory
-$this['TwigTemplateDirectory'] = __DIR__ . '/../templates';
-
+$this['Server'] = $this->share(function(){
+	return \OC::$server;
+});
 
 $this['API'] = $this->share(function($c){
 	return new API($c['AppName']);
 });
 
 /**
- * CONTROLLERS
+ * Controllers
  */
+
+$this['AmpacheController'] = $this->share(function($c){
+	return new AmpacheController($c['API'], $c['Request'], $c['AmpacheUserMapper'], $c['AmpacheSessionMapper'],
+		$c['AlbumMapper'], $c['ArtistMapper'], $c['TrackMapper'], $c['AmpacheUser'], $c['Server']);
+});
+
 $this['ApiController'] = $this->share(function($c){
 	return new ApiController($c['API'], $c['Request'],
-		$c['TrackBusinessLayer'], $c['ArtistBusinessLayer'], $c['AlbumBusinessLayer']);
+		$c['TrackBusinessLayer'], $c['ArtistBusinessLayer'], $c['AlbumBusinessLayer'], $c['Scanner']);
 });
 
 $this['PageController'] = $this->share(function($c){
-	return new PageController($c['API'], $c['Request'], $c['Scanner'], $c['ScanStatusMapper']);
+	return new PageController($c['API'], $c['Request'], $c['Scanner']);
 });
 
 $this['LogController'] = $this->share(function($c){
 	return new LogController($c['API'], $c['Request']);
 });
 
-$this['TrackMapper'] = $this->share(function($c){
-	return new TrackMapper($c['API']);
+$this['SettingController'] = $this->share(function($c){
+	return new SettingController($c['API'], $c['Request'], $c['AmpacheUserMapper']);
 });
 
-$this['TrackBusinessLayer'] = $this->share(function($c){
-	return new TrackBusinessLayer($c['TrackMapper'], $c['API']);
+/**
+ * Mappers
+ */
+
+$this['AlbumMapper'] = $this->share(function($c){
+	return new AlbumMapper($c['API']);
+});
+
+$this['AmpacheSessionMapper'] = $this->share(function($c){
+	return new AmpacheSessionMapper($c['API']);
+});
+
+$this['AmpacheUserMapper'] = $this->share(function($c){
+	return new AmpacheUserMapper($c['API']);
 });
 
 $this['ArtistMapper'] = $this->share(function($c){
 	return new ArtistMapper($c['API']);
 });
 
+$this['TrackMapper'] = $this->share(function($c){
+	return new TrackMapper($c['API']);
+});
+
+/**
+ * Business Layer
+ */
+
+$this['TrackBusinessLayer'] = $this->share(function($c){
+	return new TrackBusinessLayer($c['TrackMapper'], $c['API']);
+});
+
 $this['ArtistBusinessLayer'] = $this->share(function($c){
 	return new ArtistBusinessLayer($c['ArtistMapper'], $c['API']);
 });
 
-$this['AlbumMapper'] = $this->share(function($c){
-	return new AlbumMapper($c['API']);
-});
-
 $this['AlbumBusinessLayer'] = $this->share(function($c){
 	return new AlbumBusinessLayer($c['AlbumMapper'], $c['API']);
+});
+
+/**
+ * Utilities
+ */
+
+$this['AmpacheUser'] = $this->share(function(){
+	return new AmpacheUser();
 });
 
 $this['Scanner'] = $this->share(function($c){
@@ -100,11 +138,7 @@ $this['Scanner'] = $this->share(function($c){
 		$c['AlbumBusinessLayer'], $c['TrackBusinessLayer']);
 });
 
-$this['ScanStatusMapper'] = $this->share(function($c){
-	return new ScanStatusMapper($c['API']);
-});
-
-$this['getID3'] = $this->share(function($c){
+$this['getID3'] = $this->share(function(){
 	$getID3 = new \getID3();
 	$getID3->encoding = 'UTF-8';
 	// On 32-bit systems, getid3 tries to make a 2GB size check,
@@ -117,4 +151,26 @@ $this['getID3'] = $this->share(function($c){
 
 $this['ExtractorGetID3'] = $this->share(function($c){
 	return new ExtractorGetID3($c['API'], $c['getID3']);
+});
+
+$this['Scanner'] = $this->share(function($c){
+	return new Scanner($c['API'], $c['ExtractorGetID3'], $c['ArtistBusinessLayer'],
+		$c['AlbumBusinessLayer'], $c['TrackBusinessLayer']);
+});
+
+/**
+ * Middleware
+ */
+
+$this['AmpacheMiddleware'] = $this->share(function($c){
+	return new AmpacheMiddleware($c['API'], $c['Request'], $c['AmpacheSessionMapper'], $c['AmpacheUser']);
+});
+
+$this['MiddlewareDispatcher'] = $this->share(function($c){
+	$dispatcher = new MiddlewareDispatcher();
+	$dispatcher->registerMiddleware($c['AmpacheMiddleware']);
+	$dispatcher->registerMiddleware($c['HttpMiddleware']);
+	$dispatcher->registerMiddleware($c['SecurityMiddleware']);
+
+	return $dispatcher;
 });

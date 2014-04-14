@@ -1,19 +1,30 @@
 <?php
 $TRANSLATIONS = array(
-"Chrome is only able to playback MP3 files - see <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">wiki</a>" => "Chrome voi toistaa vain MP3-tiedostoja - lisätietoja <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">wikissä</a>",
+"Albums" => "Levyt",
+"Artists" => "Esittäjät",
 "Delete" => "Poista",
+"Description" => "Kuvaus",
+"Description (e.g. App name)" => "Kuvaus (esim. sovelluksen nimi)",
+"Generate API password" => "Luo API-salasana",
+"Invalid path" => "Virheellinen polku",
 "Loading ..." => "Ladataan...",
 "Music" => "Musiikki",
 "Next" => "Seuraava",
 "Nothing in here. Upload your music!" => "Täällä ei ole mitään. Lähetä musiikkia tänne!",
+"Path to your music collection" => "Musiikkikokoelman polku",
 "Pause" => "Keskeytä",
 "Play" => "Toista",
 "Previous" => "Edellinen",
 "Repeat" => "Kertaa",
+"Revoke API password" => "Peru API-salasana",
+"Scanning ..." => "Tutkitaan...",
 "_Show all {{ trackcount }} songs ..._::_Show all {{ trackcount }} songs ..._" => array("Näytä {{ trackcount }} kappale...","Näytä kaikki {{ trackcount }} kappaletta..."),
 "Show less ..." => "Näytä vähemmän...",
 "Shuffle" => "Sekoita",
+"This setting restricts the shown music in the web interface of the music app." => "Tämä asetus rajoittaa näytettävää musiikkia musiikkisovelluksen verkkokäyttöliittymässä.",
+"Tracks" => "Kappaleet",
 "Unknown album" => "Tuntematon levy",
-"Unknown artist" => "Tuntematon esittäjä"
+"Unknown artist" => "Tuntematon esittäjä",
+"Use your username and following password to connect to this Ampache instance:" => "Käytä käyttäjätunnustasi ja seuraavaa salasanaa yhditäessäsi tähän Ampache-istuntoon:"
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n != 1);";

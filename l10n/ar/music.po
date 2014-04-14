@@ -1,10 +1,11 @@
 # 
 # Translators:
+# Abderraouf Mehdi Bouhali <armbouhali@gmail.com>, 2014
+# suliman <291101251@std.qu.edu.sa>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
-"POT-Creation-Date: 2014-02-18 09:27:59+0500\n"
-"PO-Revision-Date: 2014-01-20 06:30+0000\n"
+"PO-Revision-Date: 2014-03-25 05:30+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/owncloud/language/ar/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,20 +13,52 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: ../js/public/app.js
-msgid ""
-"Chrome is only able to playback MP3 files - see <a "
-"href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions"
-"#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
-msgstr ""
+#: ../templates/fake-template.php
+msgid "Albums"
+msgstr "الألبومات"
+
+#: ../templates/fake-template.php
+msgid "Artists"
+msgstr "الفنانون"
 
 #: ../templates/main.php
 msgid "Delete"
-msgstr "إلغاء"
+msgstr "حذف"
+
+#: ../templates/fake-template.php
+msgid "Description"
+msgstr "وصف"
+
+#: ../templates/fake-template.php
+msgid "Description (e.g. App name)"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Generate API password"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid ""
+"Here you can generate passwords to use with the Ampache API, because they "
+"can't be stored in a really secure way due to the design of the Ampache API."
+" You can generate as many passwords as you want and revoke them anytime."
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Invalid path"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid ""
+"Keep in mind, that the Ampache API is just a preview and is unstable. Feel "
+"free to report your experience with this feature in the corresponding <a "
+"href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also"
+" like to have a list of clients to test with. Thanks"
+msgstr ""
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Loading ..."
-msgstr ""
+msgstr "تحميل ..."
 
 #: ../templates/fake-template.php
 msgid "Music"
@@ -37,15 +70,19 @@ msgstr "التالي"
 
 #: ../templates/part.main.php
 msgid "Nothing in here. Upload your music!"
+msgstr "لا شيء موجود هنا. إرفع بعض الموسيقى !"
+
+#: ../templates/fake-template.php
+msgid "Path to your music collection"
 msgstr ""
 
 #: ../templates/main.php
 msgid "Pause"
-msgstr "تجميد"
+msgstr "إيقاف"
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Play"
-msgstr "إلعب"
+msgstr "تشغيل"
 
 #: ../templates/main.php
 msgid "Previous"
@@ -55,28 +92,52 @@ msgstr "السابق"
 msgid "Repeat"
 msgstr "إعادة"
 
+#: ../templates/fake-template.php
+msgid "Revoke API password"
+msgstr ""
+
+#: ../templates/part.main.php
+msgid "Scanning ..."
+msgstr ""
+
 #: ../templates/part.main.php
 msgid "Show all {{ trackcount }} songs ..."
 msgid_plural "Show all {{ trackcount }} songs ..."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "."
+msgstr[1] "إظهار المقطع"
+msgstr[2] "إظهار المقطعين"
+msgstr[3] "إظهار كافة المقاطع الـ {{ trackcount }}"
+msgstr[4] "إظهار كافة المقاطع الـ {{ trackcount }}"
+msgstr[5] "إظهار كافة المقاطع الـ {{ trackcount }}"
 
 #: ../templates/part.main.php
 msgid "Show less ..."
-msgstr ""
+msgstr "إظهار أقل ..."
 
 #: ../templates/main.php
 msgid "Shuffle"
+msgstr "اختيار عشوائي"
+
+#: ../templates/fake-template.php
+msgid ""
+"This setting restricts the shown music in the web interface of the music "
+"app."
 msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Tracks"
+msgstr "المقاطع"
 
 #: ../templates/fake-template.php
 msgid "Unknown album"
-msgstr ""
+msgstr "ألبوم غير معروف"
 
 #: ../templates/fake-template.php
 msgid "Unknown artist"
+msgstr "فنان غير معروف"
+
+#: ../templates/fake-template.php
+msgid ""
+"Use your username and following password to connect to this Ampache "
+"instance:"
 msgstr ""

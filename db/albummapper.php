@@ -24,7 +24,7 @@
 namespace OCA\Music\Db;
 
 use \OCA\Music\AppFramework\Db\Mapper;
-use \OCA\Music\AppFramework\Core\API;
+use \OCA\Music\Core\API;
 
 use \OCA\Music\AppFramework\Db\DoesNotExistException;
 
@@ -41,8 +41,23 @@ class AlbumMapper extends Mapper {
 			'WHERE `album`.`user_id` = ? ' . $condition;
 	}
 
+	private function makeSelectQueryWithFileInfo($condition=null){
+		return 'SELECT `album`.`name`, `album`.`year`, `album`.`id`, '.
+				'`album`.`cover_file_id`, `file`.`path` as `coverFilePath` '.
+				'FROM `*PREFIX*music_albums` `album` '.
+				'LEFT OUTER JOIN `*PREFIX*filecache` `file` '.
+				'ON `album`.`cover_file_id` = `file`.`fileid` ' .
+				'AND `album`.`user_id` = ? ' . $condition;
+	}
+
 	public function findAll($userId){
 		$sql = $this->makeSelectQuery();
+		$params = array($userId);
+		return $this->findEntities($sql, $params);
+	}
+
+	public function findAllWithFileInfo($userId){
+		$sql = $this->makeSelectQueryWithFileInfo();
 		$params = array($userId);
 		return $this->findEntities($sql, $params);
 	}
@@ -97,6 +112,42 @@ class AlbumMapper extends Mapper {
 			$params = array($userId, $albumName, $albumYear);
 			$sql = $this->makeSelectQuery('AND `album`.`name` = ? AND `album`.`year` = ?');
 		}
+		return $this->findEntity($sql, $params);
+	}
+
+	public function findAlbum($albumName, $albumYear, $artistId, $userId) {
+		$sql = 'SELECT `album`.`name`, `album`.`year`, `album`.`id`, '.
+			'`album`.`cover_file_id` '.
+			'FROM `*PREFIX*music_albums` `album` '.
+			'JOIN `*PREFIX*music_album_artists` `artists` '.
+			'ON `album`.`id` = `artists`.`album_id` '.
+			'WHERE `album`.`user_id` = ? ';
+		$params = array($userId);
+
+		// add artist id check
+		if ($artistId === null) {
+			$sql .= 'AND `artists`.`artist_id` IS NULL ';
+		} else {
+			$sql .= 'AND `artists`.`artist_id` = ? ';
+			array_push($params, $artistId);
+		}
+
+		// add album name check
+		if ($albumName === null) {
+			$sql .= 'AND `album`.`name` IS NULL ';
+		} else {
+			$sql .= 'AND `album`.`name` = ? ';
+			array_push($params, $albumName);
+		}
+
+		// add album year check
+		if ($albumYear === null) {
+			$sql .= 'AND `album`.`year` IS NULL ';
+		} else {
+			$sql .= 'AND `album`.`year` = ? ';
+			array_push($params, $albumYear);
+		}
+
 		return $this->findEntity($sql, $params);
 	}
 
@@ -164,14 +215,72 @@ class AlbumMapper extends Mapper {
 	}
 
 	public function findAlbumCover($albumId, $parentFolderId){
-		$sql = 'UPDATE `*PREFIX*music_albums`
-				SET `cover_file_id` = (
-					SELECT `fileid`
+		$coverNames = array('cover', 'albumart', 'front', 'folder');
+		$imagesSql = 'SELECT `fileid`, `name`
 					FROM `*PREFIX*filecache`
 					JOIN `*PREFIX*mimetypes` ON `*PREFIX*mimetypes`.`id` = `*PREFIX*filecache`.`mimetype`
-					WHERE `parent` = ? AND `*PREFIX*mimetypes`.`mimetype` LIKE \'image%\' LIMIT 1
-				) WHERE `id` = ?';
-		$params = array($parentFolderId, $albumId);
+					WHERE `parent` = ? AND `*PREFIX*mimetypes`.`mimetype` LIKE \'image%\'';
+		$params = array($parentFolderId);
+		$result = $this->execute($imagesSql, $params);
+		$images = $result->fetchAll();
+		$imageId = null;
+		if (count($images)) {
+			usort($images, function ($imageA, $imageB) use ($coverNames) {
+				$nameA = strtolower($imageA['name']);
+				$nameB = strtolower($imageB['name']);
+				$indexA = PHP_INT_MAX;
+				$indexB = PHP_INT_MAX;
+				foreach ($coverNames as $i => $coverName) {
+					if ($indexA === PHP_INT_MAX && strpos($nameA, $coverName) === 0) {
+						$indexA = $i;
+					}
+					if ($indexB === PHP_INT_MAX && strpos($nameB, $coverName) === 0) {
+						$indexB = $i;
+					}
+					if ($indexA !== PHP_INT_MAX  && $indexB !== PHP_INT_MAX) {
+						break;
+					}
+				}
+				return $indexA > $indexB;
+			});
+			$imageId = $images[0]['fileid'];
+		};
+		$sql = 'UPDATE `*PREFIX*music_albums`
+				SET `cover_file_id` = ? WHERE `id` = ?';
+		$params = array($imageId, $albumId);
 		$this->execute($sql, $params);
+	}
+
+	public function count($userId){
+		$sql = 'SELECT COUNT(*) FROM `*PREFIX*music_albums` '.
+			'WHERE `user_id` = ?';
+		$params = array($userId);
+		$result = $this->execute($sql, $params);
+		$row = $result->fetchRow();
+		return $row['COUNT(*)'];
+	}
+
+	public function countByArtist($artistId, $userId){
+		$sql = 'SELECT COUNT(*) '.
+			'FROM `*PREFIX*music_albums` `album` '.
+			'JOIN `*PREFIX*music_album_artists` `artists` '.
+			'ON `album`.`id` = `artists`.`album_id` '.
+			'WHERE `album`.`user_id` = ? AND `artists`.`artist_id` = ? ';
+		$params = array($userId, $artistId);
+		$result = $this->execute($sql, $params);
+		$row = $result->fetchRow();
+		return $row['COUNT(*)'];
+	}
+
+	public function findAllByName($name, $userId, $fuzzy = false){
+		if ($fuzzy) {
+			$condition = 'AND LOWER(`album`.`name`) LIKE LOWER(?) ';
+			$name = '%' . $name . '%';
+		} else {
+			$condition = 'AND `album`.`name` = ? ';
+		}
+		$sql = $this->makeSelectQuery($condition);
+		$params = array($userId, $name);
+		return $this->findEntities($sql, $params);
 	}
 }

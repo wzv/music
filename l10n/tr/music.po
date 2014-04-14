@@ -4,8 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
-"POT-Creation-Date: 2014-02-18 09:27:59+0500\n"
-"PO-Revision-Date: 2014-01-20 17:30+0000\n"
+"PO-Revision-Date: 2014-04-02 11:50+0000\n"
 "Last-Translator: volkangezer <volkangezer@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/projects/p/owncloud/language/tr/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,16 +12,48 @@ msgstr ""
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../js/public/app.js
-msgid ""
-"Chrome is only able to playback MP3 files - see <a "
-"href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions"
-"#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
-msgstr "Chrome, sadece MP3 dosyalarını oynatabilir - bkz. <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">viki</a>"
+#: ../templates/fake-template.php
+msgid "Albums"
+msgstr "Albümler"
+
+#: ../templates/fake-template.php
+msgid "Artists"
+msgstr "Sanatçılar"
 
 #: ../templates/main.php
 msgid "Delete"
 msgstr "Sil"
+
+#: ../templates/fake-template.php
+msgid "Description"
+msgstr "Tanımlama"
+
+#: ../templates/fake-template.php
+msgid "Description (e.g. App name)"
+msgstr "Açıklama (örn. Uygulama adı)"
+
+#: ../templates/fake-template.php
+msgid "Generate API password"
+msgstr "API parolası oluştur"
+
+#: ../templates/fake-template.php
+msgid ""
+"Here you can generate passwords to use with the Ampache API, because they "
+"can't be stored in a really secure way due to the design of the Ampache API."
+" You can generate as many passwords as you want and revoke them anytime."
+msgstr "Burada Ampache API'si ile kullanılacak parolaları oluşturabilirsiniz. Çünkü Ampache API'sinin tasarımından dolayı bu parolalar yeterince güvenli bir şekilde depolanamamaktadır. İstediğiniz kadar parola oluşturup; ardından istediğiniz zaman geçersiz kılabilirsiniz."
+
+#: ../templates/fake-template.php
+msgid "Invalid path"
+msgstr "Geçersiz yol"
+
+#: ../templates/fake-template.php
+msgid ""
+"Keep in mind, that the Ampache API is just a preview and is unstable. Feel "
+"free to report your experience with this feature in the corresponding <a "
+"href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also"
+" like to have a list of clients to test with. Thanks"
+msgstr "Unutmayın, Ampache API'si henüz bir önizleme olup, kararlı sürüm değildir. Bu özellikle ilgili deneyiminizi ilgili <a href=\"https://github.com/owncloud/music/issues/60\">sorunlar</a> kısmında bildirmekten çekinmeyin. Ayrıca test edilmesi gereken istemcilerin listesini de edinmek isterim. Teşekkürler."
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Loading ..."
@@ -40,6 +71,10 @@ msgstr "Sonraki"
 msgid "Nothing in here. Upload your music!"
 msgstr "Burada hiçbir şey yok. Müziğinizi yükleyin!"
 
+#: ../templates/fake-template.php
+msgid "Path to your music collection"
+msgstr "Müzik koleksiyonunuzun yolu"
+
 #: ../templates/main.php
 msgid "Pause"
 msgstr "Beklet"
@@ -56,6 +91,14 @@ msgstr "Önceki"
 msgid "Repeat"
 msgstr "Tekrar"
 
+#: ../templates/fake-template.php
+msgid "Revoke API password"
+msgstr "API parolasını geçersiz kıl"
+
+#: ../templates/part.main.php
+msgid "Scanning ..."
+msgstr "Taranıyor..."
+
 #: ../templates/part.main.php
 msgid "Show all {{ trackcount }} songs ..."
 msgid_plural "Show all {{ trackcount }} songs ..."
@@ -71,9 +114,25 @@ msgid "Shuffle"
 msgstr "Karıştır"
 
 #: ../templates/fake-template.php
+msgid ""
+"This setting restricts the shown music in the web interface of the music "
+"app."
+msgstr "Bu ayar, müzik uygulamasının web arayüzünde gösterdiği müziği kısıtlar."
+
+#: ../templates/fake-template.php
+msgid "Tracks"
+msgstr "Parçalar"
+
+#: ../templates/fake-template.php
 msgid "Unknown album"
 msgstr "Bilinmeyen albüm"
 
 #: ../templates/fake-template.php
 msgid "Unknown artist"
 msgstr "Bilinmeyen sanatçı"
+
+#: ../templates/fake-template.php
+msgid ""
+"Use your username and following password to connect to this Ampache "
+"instance:"
+msgstr "Bu Ampache örneğine bağlanmak için kullanıcı adı ve parolanızı kullanın:"

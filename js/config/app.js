@@ -33,19 +33,15 @@ if($('html').hasClass('ie')) {
 	setTimeout(replaceSVGs, 5000);
 }
 
-angular.module('Music', ['restangular', 'gettext']).
-	config(
-		['$routeProvider', '$interpolateProvider', 'RestangularProvider',
-		function ($routeProvider, $interpolateProvider, RestangularProvider) {
-
-	$routeProvider.when('/', {
-		templateUrl: 'main.html'
-	}).when('/file/:id', {
-		templateUrl: 'main.html'
-	}).otherwise({
-		redirectTo: '/'
-	});
+angular.module('Music', ['restangular', 'gettext', 'ngRoute']).
+	config(['RestangularProvider', function (RestangularProvider) {
 
 	// configure RESTAngular path
 	RestangularProvider.setBaseUrl('api');
-}]);
+}]).
+	run(function(Token, Restangular){
+
+	// add CSRF token
+	Restangular.setDefaultHeaders({requesttoken: Token});
+
+});

@@ -4,25 +4,56 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
-"POT-Creation-Date: 2014-02-18 09:27:59+0500\n"
-"PO-Revision-Date: 2014-01-26 21:30+0000\n"
-"Last-Translator: asieriko <asieriko@gmail.com>\n"
+"PO-Revision-Date: 2014-03-25 05:30+0000\n"
+"Last-Translator: I Robot\n"
 "Language-Team: Basque (http://www.transifex.com/projects/p/owncloud/language/eu/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: eu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../js/public/app.js
-msgid ""
-"Chrome is only able to playback MP3 files - see <a "
-"href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions"
-"#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
-msgstr "Chrome bakarrik MP3 fitxategiak erreproduzi ditzake - ikusi <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
+#: ../templates/fake-template.php
+msgid "Albums"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Artists"
+msgstr ""
 
 #: ../templates/main.php
 msgid "Delete"
 msgstr "Ezabatu"
+
+#: ../templates/fake-template.php
+msgid "Description"
+msgstr "Deskribapena"
+
+#: ../templates/fake-template.php
+msgid "Description (e.g. App name)"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Generate API password"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid ""
+"Here you can generate passwords to use with the Ampache API, because they "
+"can't be stored in a really secure way due to the design of the Ampache API."
+" You can generate as many passwords as you want and revoke them anytime."
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Invalid path"
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid ""
+"Keep in mind, that the Ampache API is just a preview and is unstable. Feel "
+"free to report your experience with this feature in the corresponding <a "
+"href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also"
+" like to have a list of clients to test with. Thanks"
+msgstr ""
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Loading ..."
@@ -40,6 +71,10 @@ msgstr "Hurrengoa"
 msgid "Nothing in here. Upload your music!"
 msgstr "Ez dago ezer. Igo zure musika!"
 
+#: ../templates/fake-template.php
+msgid "Path to your music collection"
+msgstr ""
+
 #: ../templates/main.php
 msgid "Pause"
 msgstr "Pausarazi"
@@ -56,6 +91,14 @@ msgstr "Aurrekoa"
 msgid "Repeat"
 msgstr "Errepikatu"
 
+#: ../templates/fake-template.php
+msgid "Revoke API password"
+msgstr ""
+
+#: ../templates/part.main.php
+msgid "Scanning ..."
+msgstr ""
+
 #: ../templates/part.main.php
 msgid "Show all {{ trackcount }} songs ..."
 msgid_plural "Show all {{ trackcount }} songs ..."
@@ -71,9 +114,25 @@ msgid "Shuffle"
 msgstr "Nahastu"
 
 #: ../templates/fake-template.php
+msgid ""
+"This setting restricts the shown music in the web interface of the music "
+"app."
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Tracks"
+msgstr ""
+
+#: ../templates/fake-template.php
 msgid "Unknown album"
 msgstr "Diska ezezaguna"
 
 #: ../templates/fake-template.php
 msgid "Unknown artist"
 msgstr "Artista ezezaguna"
+
+#: ../templates/fake-template.php
+msgid ""
+"Use your username and following password to connect to this Ampache "
+"instance:"
+msgstr ""

@@ -29,7 +29,7 @@ namespace OCA\Music\DependencyInjection;
 use OCA\Music\AppFramework\Http\Http;
 use OCA\Music\AppFramework\Http\Request;
 use OCA\Music\AppFramework\Http\Dispatcher;
-use OCA\Music\AppFramework\Core\API;
+use OCA\Music\Core\API;
 use OCA\Music\AppFramework\Middleware\MiddlewareDispatcher;
 use OCA\Music\AppFramework\Middleware\Http\HttpMiddleware;
 use OCA\Music\AppFramework\Middleware\Security\SecurityMiddleware;
@@ -84,7 +84,7 @@ class DIContainer extends \Pimple {
 			);
 		});
 
-		$this['Protocol'] = $this->share(function($c){
+		$this['Protocol'] = $this->share(function(){
 			if(isset($_SERVER['SERVER_PROTOCOL'])) {
 				return new Http($_SERVER, $_SERVER['SERVER_PROTOCOL']);
 			} else {

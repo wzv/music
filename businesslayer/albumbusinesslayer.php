@@ -61,6 +61,16 @@ class AlbumBusinessLayer extends BusinessLayer {
 	}
 
 	/**
+	 * Returns all albums
+	 * @param string $userId the name of the user
+	 * @return array of albums
+	 */
+	public function findAllWithFileInfo($userId){
+		$albums = $this->mapper->findAllWithFileInfo($userId);
+		return $albums;
+	}
+
+	/**
 	 * Returns all albums filtered by artist
 	 * @param string $artistId the id of the artist
 	 * @return array of albums
@@ -94,7 +104,7 @@ class AlbumBusinessLayer extends BusinessLayer {
 	 */
 	public function addAlbumIfNotExist($name, $year, $artistId, $userId){
 		try {
-			$album = $this->mapper->findByNameAndYear($name, $year, $userId);
+			$album = $this->mapper->findAlbum($name, $year, $artistId, $userId);
 			$this->api->log('addAlbumIfNotExist - exists - ID: ' . $album->getId(), 'debug');
 		} catch(DoesNotExistException $ex){
 			$album = new Album();

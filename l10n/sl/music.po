@@ -4,8 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
-"POT-Creation-Date: 2014-02-18 09:27:59+0500\n"
-"PO-Revision-Date: 2014-01-25 18:10+0000\n"
+"PO-Revision-Date: 2014-04-03 19:40+0000\n"
 "Last-Translator: mateju <>\n"
 "Language-Team: Slovenian (http://www.transifex.com/projects/p/owncloud/language/sl/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,16 +12,48 @@ msgstr ""
 "Language: sl\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
-#: ../js/public/app.js
-msgid ""
-"Chrome is only able to playback MP3 files - see <a "
-"href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions"
-"#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
-msgstr "Brskalnik Chrome lahko predvaja le datoteke MP3 - več podrobnosti je na straneh <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">wiki</a>."
+#: ../templates/fake-template.php
+msgid "Albums"
+msgstr "Albumi"
+
+#: ../templates/fake-template.php
+msgid "Artists"
+msgstr "Izvajalci"
 
 #: ../templates/main.php
 msgid "Delete"
 msgstr "Izbriši"
+
+#: ../templates/fake-template.php
+msgid "Description"
+msgstr "Opis"
+
+#: ../templates/fake-template.php
+msgid "Description (e.g. App name)"
+msgstr "Opis (na primer ime programa)"
+
+#: ../templates/fake-template.php
+msgid "Generate API password"
+msgstr "Ustvari geslo API"
+
+#: ../templates/fake-template.php
+msgid ""
+"Here you can generate passwords to use with the Ampache API, because they "
+"can't be stored in a really secure way due to the design of the Ampache API."
+" You can generate as many passwords as you want and revoke them anytime."
+msgstr ""
+
+#: ../templates/fake-template.php
+msgid "Invalid path"
+msgstr "Neveljavna pot"
+
+#: ../templates/fake-template.php
+msgid ""
+"Keep in mind, that the Ampache API is just a preview and is unstable. Feel "
+"free to report your experience with this feature in the corresponding <a "
+"href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also"
+" like to have a list of clients to test with. Thanks"
+msgstr ""
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Loading ..."
@@ -40,6 +71,10 @@ msgstr "Naslednja"
 msgid "Nothing in here. Upload your music!"
 msgstr "V mapi ni glasbenih datotek. Dodajte skladbe!"
 
+#: ../templates/fake-template.php
+msgid "Path to your music collection"
+msgstr "Pot do zbirke glasbe"
+
 #: ../templates/main.php
 msgid "Pause"
 msgstr "Premor"
@@ -55,6 +90,14 @@ msgstr "Predhodna"
 #: ../templates/main.php
 msgid "Repeat"
 msgstr "Ponovi"
+
+#: ../templates/fake-template.php
+msgid "Revoke API password"
+msgstr "Razveljavi geslo API"
+
+#: ../templates/part.main.php
+msgid "Scanning ..."
+msgstr "Poteka preiskovanje ..."
 
 #: ../templates/part.main.php
 msgid "Show all {{ trackcount }} songs ..."
@@ -73,9 +116,25 @@ msgid "Shuffle"
 msgstr "Premešaj"
 
 #: ../templates/fake-template.php
+msgid ""
+"This setting restricts the shown music in the web interface of the music "
+"app."
+msgstr "Nastavitev omeji prikaz glasbe v spletnem vmesniku programa glasbe."
+
+#: ../templates/fake-template.php
+msgid "Tracks"
+msgstr "Sledi"
+
+#: ../templates/fake-template.php
 msgid "Unknown album"
 msgstr "Neznan album"
 
 #: ../templates/fake-template.php
 msgid "Unknown artist"
 msgstr "Neznan izvajalec"
+
+#: ../templates/fake-template.php
+msgid ""
+"Use your username and following password to connect to this Ampache "
+"instance:"
+msgstr "Uporabite uporabniško ime in navedeno geslo za povezavo z Ampache:"

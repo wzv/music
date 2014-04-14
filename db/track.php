@@ -25,9 +25,37 @@
 namespace OCA\Music\Db;
 
 use \OCA\Music\AppFramework\Db\Entity;
-use \OCA\Music\AppFramework\Core\API;
+use \OCA\Music\Core\API;
 
 
+/**
+ * @method string getTitle()
+ * @method setTitle(string $title)
+ * @method int getNumber()
+ * @method setNumber(int $number)
+ * @method int getArtistId()
+ * @method setArtistId(int $artistId)
+ * @method string getArtist()
+ * @method setArtist(string $artist)
+ * @method int getAlbumId()
+ * @method setAlbumId(int $albumId)
+ * @method string getAlbum()
+ * @method setAlbum(string $album)
+ * @method int getLength()
+ * @method setLength(int $length)
+ * @method int getFileSize()
+ * @method setFileSize(int $fileSize)
+ * @method int getFileId()
+ * @method setFileId(int $fileId)
+ * @method string getFilePath()
+ * @method setFilePath(string $filePath)
+ * @method int getBitrate()
+ * @method setBitrate(int $bitrate)
+ * @method string getMimetype()
+ * @method setMimetype(string $mimetype)
+ * @method string getUserId()
+ * @method setUserId(string $userId)
+ */
 class Track extends Entity {
 
 	public $title;
@@ -37,7 +65,9 @@ class Track extends Entity {
 	public $albumId;
 	public $album;
 	public $length;
+	public $fileSize;
 	public $fileId;
+	public $filePath;
 	public $bitrate;
 	public $uri;
 	public $mimetype;
@@ -60,7 +90,7 @@ class Track extends Entity {
 		);
 	}
 
-	public function getArtist(API $api) {
+	public function getArtistWithUri(API $api) {
 		return array(
 			'id' => $this->artistId,
 			'uri' => $api->linkToRoute(
@@ -70,7 +100,7 @@ class Track extends Entity {
 		);
 	}
 
-	public function getAlbum(API $api) {
+	public function getAlbumWithUri(API $api) {
 		return array(
 			'id' => $this->albumId,
 			'uri' => $api->linkToRoute(
@@ -80,12 +110,26 @@ class Track extends Entity {
 		);
 	}
 
+	public function toCollection(API $api) {
+		return array(
+			'title' => $this->getTitle(),
+			'number' => $this->getNumber(),
+			'artistId' => $this->getArtistId(),
+			'albumId' => $this->getAlbumId(),
+			'files' => array($this->getMimetype() => $api->linkToRoute(
+				'download',
+				array('file' => strstr($this->getFilePath(),'/'))
+			)),
+			'id' => $this->getId(),
+		);
+	}
+
 	public function toAPI(API $api) {
 		return array(
 			'title' => $this->getTitle(),
 			'number' => $this->getNumber(),
-			'artist' => $this->getArtist($api),
-			'album' => $this->getAlbum($api),
+			'artist' => $this->getArtistWithUri($api),
+			'album' => $this->getAlbumWithUri($api),
 			'length' => $this->getLength(),
 			'files' => array($this->getMimetype() => $api->linkToRoute(
 				'download',

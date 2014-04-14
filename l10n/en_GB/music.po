@@ -4,8 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
-"POT-Creation-Date: 2014-02-18 09:27:59+0500\n"
-"PO-Revision-Date: 2014-01-20 17:10+0000\n"
+"PO-Revision-Date: 2014-03-25 14:02+0000\n"
 "Last-Translator: mnestis <transifex@mnestis.net>\n"
 "Language-Team: English (United Kingdom) (http://www.transifex.com/projects/p/owncloud/language/en_GB/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,16 +12,48 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../js/public/app.js
-msgid ""
-"Chrome is only able to playback MP3 files - see <a "
-"href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions"
-"#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
-msgstr "Chrome is only able to playback MP3 files - see <a href=\"https://github.com/owncloud/music/wiki/Frequently-Asked-Questions#why-can-chromechromium-just-playback-mp3-files\">wiki</a>"
+#: ../templates/fake-template.php
+msgid "Albums"
+msgstr "Albums"
+
+#: ../templates/fake-template.php
+msgid "Artists"
+msgstr "Artists"
 
 #: ../templates/main.php
 msgid "Delete"
 msgstr "Delete"
+
+#: ../templates/fake-template.php
+msgid "Description"
+msgstr "Description"
+
+#: ../templates/fake-template.php
+msgid "Description (e.g. App name)"
+msgstr "Description (e.g. App name)"
+
+#: ../templates/fake-template.php
+msgid "Generate API password"
+msgstr "Generate API password"
+
+#: ../templates/fake-template.php
+msgid ""
+"Here you can generate passwords to use with the Ampache API, because they "
+"can't be stored in a really secure way due to the design of the Ampache API."
+" You can generate as many passwords as you want and revoke them anytime."
+msgstr "Here you can generate passwords to use with the Ampache API, because they can't be stored in a really secure way due to the design of the Ampache API. You can generate as many passwords as you want and revoke them anytime."
+
+#: ../templates/fake-template.php
+msgid "Invalid path"
+msgstr "Invalid path"
+
+#: ../templates/fake-template.php
+msgid ""
+"Keep in mind, that the Ampache API is just a preview and is unstable. Feel "
+"free to report your experience with this feature in the corresponding <a "
+"href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also"
+" like to have a list of clients to test with. Thanks"
+msgstr "Keep in mind, that the Ampache API is just a preview and is unstable. Feel free to report your experience with this feature in the corresponding <a href=\"https://github.com/owncloud/music/issues/60\">issue</a>. I would also like to have a list of clients to test with. Thanks"
 
 #: ../templates/main.php ../templates/part.main.php
 msgid "Loading ..."
@@ -40,6 +71,10 @@ msgstr "Next"
 msgid "Nothing in here. Upload your music!"
 msgstr "Nothing in here. Upload your music!"
 
+#: ../templates/fake-template.php
+msgid "Path to your music collection"
+msgstr "Path to your music collection"
+
 #: ../templates/main.php
 msgid "Pause"
 msgstr "Pause"
@@ -56,6 +91,14 @@ msgstr "Previous"
 msgid "Repeat"
 msgstr "Repeat"
 
+#: ../templates/fake-template.php
+msgid "Revoke API password"
+msgstr "Revoke API password"
+
+#: ../templates/part.main.php
+msgid "Scanning ..."
+msgstr "Scanning ..."
+
 #: ../templates/part.main.php
 msgid "Show all {{ trackcount }} songs ..."
 msgid_plural "Show all {{ trackcount }} songs ..."
@@ -71,9 +114,25 @@ msgid "Shuffle"
 msgstr "Shuffle"
 
 #: ../templates/fake-template.php
+msgid ""
+"This setting restricts the shown music in the web interface of the music "
+"app."
+msgstr "This setting restricts the music shown in the web interface of the music app."
+
+#: ../templates/fake-template.php
+msgid "Tracks"
+msgstr "Tracks"
+
+#: ../templates/fake-template.php
 msgid "Unknown album"
 msgstr "Unknown album"
 
 #: ../templates/fake-template.php
 msgid "Unknown artist"
 msgstr "Unknown artist"
+
+#: ../templates/fake-template.php
+msgid ""
+"Use your username and following password to connect to this Ampache "
+"instance:"
+msgstr "Use your username and following password to connect to this Ampache instance:"
